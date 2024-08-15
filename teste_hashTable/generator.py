@@ -1,22 +1,33 @@
 import random
 
-def generate_input_file(filename, num_elements, repeat_probability=0.1):
-    keys = []
+def generate_input_file(filename, num_elements, num_repeats):
+    unique_elements = num_elements - num_repeats
+    
+    # Gerar chaves únicas para a maior parte dos elementos
+    keys = [random.randint(1, 10000) for _ in range(unique_elements)]
+    
+    # Garantir algumas repetições ao copiar chaves já geradas
+    repeated_keys = random.choices(keys, k=num_repeats)
+    
+    # Combinar chaves únicas com repetidas
+    keys.extend(repeated_keys)
+    
+    # Embaralhar as chaves para que as repetidas não fiquem no final
+    random.shuffle(keys)
+    
+    # Gerar os valores correspondentes
+    values = [random.randint(1, 1000) for _ in range(num_elements)]
+    
     with open(filename, 'w') as f:
         f.write(f"{num_elements}\n")
-        for i in range(num_elements):
-            if keys and random.random() < repeat_probability:
-                key = random.choice(keys)  # Reutiliza uma chave já existente
-            else:
-                key = random.randint(1, 10000)
-                keys.append(key)  # Armazena a nova chave
-
-            value = random.randint(1, 100000)
+        for key, value in zip(keys, values):
             f.write(f"{key} {value}\n")
 
-# Gerar arquivos de entrada para diferentes quantidades de pares chave-valor
-generate_input_file('input_500.txt', 500, repeat_probability=0.1)
-generate_input_file('input_1000.txt', 1000, repeat_probability=0.15)
-generate_input_file('input_1500.txt', 1500, repeat_probability=0.2)
-generate_input_file('input_2000.txt', 2000, repeat_probability=0.25)
 
+generate_input_file('input_1000.txt', 1000, 300)
+
+generate_input_file('input_3000.txt', 3000, 1000) 
+
+generate_input_file('input_5000.txt', 5000, 2000) 
+
+generate_input_file('input_10000.txt', 10000, 5000) 
