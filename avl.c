@@ -9,12 +9,6 @@ typedef struct AVLNode {
     int height;
 } AVLNode;
 
-// Estrutura da tabela hash
-typedef struct HashTable {
-    AVLNode** table;
-    int size;
-} HashTable;
-
 // Função para obter a altura de um nó AVL
 int height(AVLNode* node) {
     if (node == NULL)
@@ -47,8 +41,8 @@ AVLNode* right_rotate(AVLNode* y) {
     y->left = T2;
 
     // Atualizar alturas
-    y->height = 1 + max(height(y->left), height(y->right));
-    x->height = 1 + max(height(x->left), height(x->right));
+    y->height = max(height(y->left), height(y->right)) + 1;
+    x->height = max(height(x->left), height(x->right)) + 1;
 
     // Retornar nova raiz
     return x;
@@ -64,8 +58,8 @@ AVLNode* left_rotate(AVLNode* x) {
     x->right = T2;
 
     // Atualizar alturas
-    x->height = 1 + max(height(x->left), height(x->right));
-    y->height = 1 + max(height(y->left), height(y->right));
+    x->height = max(height(x->left), height(x->right)) + 1;
+    y->height = max(height(y->left), height(y->right)) + 1;
 
     // Retornar nova raiz
     return y;
@@ -78,9 +72,9 @@ int get_balance(AVLNode* node) {
     return height(node->left) - height(node->right);
 }
 
-// Função para inserir uma chave na árvore AVL e balancear a árvore
+// Função para inserir uma chave na árvore AVL
 AVLNode* insert_avl(AVLNode* node, int key) {
-    // 1. Inserir como em uma BST normal
+    // Inserção como em uma árvore binária de busca normal
     if (node == NULL)
         return create_node(key);
 
@@ -91,62 +85,37 @@ AVLNode* insert_avl(AVLNode* node, int key) {
     else
         return node;  // Chaves duplicadas não são permitidas
 
-    // 2. Atualizar a altura do nó ancestral
+    // Atualizar a altura do nó ancestral
     node->height = 1 + max(height(node->left), height(node->right));
 
-    // 3. Obter o fator de balanceamento
+    // Obter o fator de balanceamento para verificar se este nó se tornou desbalanceado
     int balance = get_balance(node);
 
-    // 4. Balancear a árvore
-    // Caso esquerda-esquerda
+    // Caso 1: Esquerda-Esquerda
     if (balance > 1 && key < node->left->key)
         return right_rotate(node);
 
-    // Caso direita-direita
+    // Caso 2: Direita-Direita
     if (balance < -1 && key > node->right->key)
         return left_rotate(node);
 
-    // Caso esquerda-direita
+    // Caso 3: Esquerda-Direita
     if (balance > 1 && key > node->left->key) {
         node->left = left_rotate(node->left);
         return right_rotate(node);
     }
 
-    // Caso direita-esquerda
+    // Caso 4: Direita-Esquerda
     if (balance < -1 && key < node->right->key) {
         node->right = right_rotate(node->right);
         return left_rotate(node);
     }
 
-    // Retornar o nó (inalterado) ponteiro
+    // Retornar o ponteiro (inalterado) do nó
     return node;
 }
 
-// Função hash simples (baseada no módulo)
-unsigned int hash_function(int key, int table_size) {
-    return key % table_size;
-}
-
-// Função para criar uma tabela hash
-HashTable* create_table(int size) {
-    HashTable* hash_table = (HashTable*)malloc(sizeof(HashTable));
-    hash_table->size = size;
-    hash_table->table = (AVLNode**)malloc(sizeof(AVLNode*) * size);
-
-    for (int i = 0; i < size; i++) {
-        hash_table->table[i] = NULL;
-    }
-
-    return hash_table;
-}
-
-// Função para inserir uma chave na tabela hash
-void insert(HashTable* hash_table, int key) {
-    unsigned int index = hash_function(key, hash_table->size);
-    hash_table->table[index] = insert_avl(hash_table->table[index], key);
-}
-
-// Função para liberar memória de uma árvore AVL
+// Função para liberar a memória da árvore AVL
 void free_avl(AVLNode* node) {
     if (node == NULL)
         return;
@@ -155,24 +124,14 @@ void free_avl(AVLNode* node) {
     free(node);
 }
 
-// Função para liberar a memória da tabela hash
-void free_table(HashTable* hash_table) {
-    for (int i = 0; i < hash_table->size; i++) {
-        free_avl(hash_table->table[i]);
-    }
-    free(hash_table->table);
-    free(hash_table);
-}
-
-// Função principal para testar a tabela hash com árvores AVL
+// Função principal que lê as entradas de um arquivo e insere na árvore AVL
 int main(int argc, char* argv[]) {
     if (argc != 2) {
         printf("Usage: %s <input_file>\n", argv[0]);
         return 1;
     }
 
-    int table_size = 10007;  // Tamanho da tabela hash
-    HashTable* hash_table = create_table(table_size);
+    AVLNode* root = NULL;
 
     FILE* file = fopen(argv[1], "r");
     if (file == NULL) {
@@ -182,12 +141,12 @@ int main(int argc, char* argv[]) {
 
     int key;
     while (fscanf(file, "%d", &key) != EOF) {
-        insert(hash_table, key);
+        root = insert_avl(root, key);
     }
 
     fclose(file);
 
-    free_table(hash_table);
+    free_avl(root);
 
     return 0;
 }

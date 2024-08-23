@@ -11,7 +11,7 @@ def measure_execution_time(executable, input_file):
 def main():
     executables = {
         "Lista Encadeada": "./hash",  # Nome do executável do código com lista encadeada
-        "Árvore AVL": "./hash2"  # Nome do executável do código com árvore AVL
+        "Árvore AVL": "./avl"  # Nome do executável do código com árvore AVL
     }
     
     input_dir = "input_files"    # Diretório dos arquivos de entrada
@@ -22,7 +22,7 @@ def main():
         "input10.txt"
     ]  # Arquivos de entrada
 
-    num_runs = 100  # Número de execuções para calcular a média
+    num_runs = 50  # Número de execuções para calcular a média
 
     results = { "Lista Encadeada": [], "Árvore AVL": [] }
 
