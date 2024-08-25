@@ -48,7 +48,7 @@ def main():
         "AVL": "./avl"
     }
     
-    input_dir = "input_files3"
+    input_dir = "input_files"
     input_files = [
         "input1.txt", "input2.txt" ,"input3.txt", 
         "input4.txt", "input5.txt", "input6.txt", 
