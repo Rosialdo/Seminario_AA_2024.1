@@ -12,6 +12,8 @@ Este projeto tem como objetivo comparar o desempenho de duas implementações di
 
 ### 2. Tabela Hash com Lista Encadeada:
 
+- Nesta implementação, colisões na tabela hash são tratadas utilizando listas encadeadas simples. Cada entrada da tabela hash contém uma lista encadeada onde novas chaves são adicionadas no início da lista.
+
 ## Estrutura dos Arquivos
 
 - `hashAVL.c`: Implementa a Tabela Hash com Listas Encadeadas.
@@ -19,6 +21,13 @@ Este projeto tem como objetivo comparar o desempenho de duas implementações di
 - `hashEncadeado.c`: Implementa a Tabela Hash com Listas Encadeadas.
 
 - `monitoramento.py`: Script Python que executa ambos os programas com diferentes arquivos de entrada, mede o tempo de execução e gera gráficos comparativos.
+
+## Dependências
+
+- Python 3.x
+- `matplotlib` para geração de gráficos.
+- `statistics` para cálculo de métricas de desempenho.
+
 
 ## Como executar:
 
