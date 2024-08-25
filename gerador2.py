@@ -20,15 +20,12 @@ def generate_random_numbers(filename, num_entries, table_size):
             f.write(f"{number}\n")
 
 def main():
-    output_dir = "input_files"
+    output_dir = "input_files1"
     os.makedirs(output_dir, exist_ok=True)
 
     table_size = 10007  # Tamanho da tabela hash, usado para ajustar intervalo de números
 
-    # Configurações para os arquivos de entrada (sem colisões)
     configurations = [
-        ("input1.txt", 50),     
-        ("input2.txt", 100),   
         ("input3.txt", 1000),   
         ("input4.txt", 2000), 
         ("input5.txt", 3000), 
@@ -37,6 +34,17 @@ def main():
         ("input8.txt", 6000),   
         ("input9.txt", 7000),   
         ("input10.txt", 8000),
+        ("input11.txt", 9000),
+        ("input12.txt", 10000),
+        ("input13.txt", 11000),
+        ("input14.txt", 12000),
+        ("input15.txt", 13000),
+        ("input16.txt", 14000),
+        ("input17.txt", 15000),
+        ("input18.txt", 16000),
+        ("input19.txt", 18000),
+        ("input1.txt", 20000),
+
     ]
 
     for config in configurations:
